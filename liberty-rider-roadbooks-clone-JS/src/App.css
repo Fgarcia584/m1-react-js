@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+#root {
+  width: 100vw;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.navbar {
+  max-width: 1290px;
+  margin: 0 auto;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
