@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { signInWithGooglePopup } from "../../../../firebase"
 import { AuthContext } from "../../../contexts/authContext";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AuthActionType } from "../../../reducers/AuthReducer";
+import { LOGIN } from "../../../reducers/AuthReducer";
 
 
 const LoginForm = () => {
@@ -17,7 +17,7 @@ const LoginForm = () => {
             
                 if (response.user) {
                     // console.log(response.user)
-                    dispatch({ type: AuthActionType.LOGIN, payload: response.user })
+                    dispatch({ type: LOGIN, payload: response.user })
                     localStorage.setItem('@user', JSON.stringify(response.user))
                     navigate(state?.from ? state.from : '/')
                 }            

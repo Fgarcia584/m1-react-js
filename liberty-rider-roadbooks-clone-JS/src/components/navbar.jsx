@@ -1,14 +1,25 @@
-import { PropsWithChildren, useContext } from "react"
+import { PropsWithChildren, useContext, useEffect } from "react"
 import LibertyLogo from "../assets/logo-with-text.png"
 import { Link } from "react-router-dom"
 import { AuthContext } from "../contexts/authContext"
+import { signOut } from "firebase/auth"
 
 
-const Navbar: React.FC<PropsWithChildren> = () => {
+const Navbar = () => {
 
-  const [state] = useContext(AuthContext)
+  const { state, dispatch } = useContext(AuthContext)
+  const photoUrl = state.userInfos?.photoURL
+  const userName = state.userInfos?.displayName.split(' ')[0]
 
-  console.log(state)
+  const onLogout = async () => {
+    await signOut(auth)
+        .then(() => {
+            localStorage.removeItem('@user')
+            dispatch({ type: LOGOUT })
+        })
+        .catch(error => console.log('SignOut error ->', error))
+  }
+
 
 
   return (
@@ -33,12 +44,12 @@ const Navbar: React.FC<PropsWithChildren> = () => {
         </ul>
         {state.isLoggedIn ? (
           <>
-            <img className="w-8 rounded-full" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+            <img className="w-8 rounded-full" src={ photoUrl } />
             <div className="dropdown dropdown-end">
-              <div tabIndex={0} role="button" className="btn btn-ghost rounded-btn">Dropdown</div>
-              <ul tabIndex={0} className="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-44 mt-4">
-                <li><a>Item 1</a></li>
-                <li><a>Item 2</a></li>
+              <div tabIndex={0} role="button" className="btn btn-ghost rounded-btn">{userName}</div>
+              <ul tabIndex={0} className="menu dropdown-content z-[1] shadow bg-base-100 rounded-box w-44 mt-4">
+                <li><Link to="/" className="text-zinc-950">Mes itinéraires et roadbooks</Link></li>
+                <li><button onClick={onLogout}>Déconnexion</button></li>
               </ul>
             </div>
 
