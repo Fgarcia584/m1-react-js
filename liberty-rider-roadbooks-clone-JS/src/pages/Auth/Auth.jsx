@@ -5,7 +5,7 @@ export const AuthPage = () => {
         
         return (
             <>
-            <RegisterCard />    
+                <RegisterCard />    
             </>
             
         );

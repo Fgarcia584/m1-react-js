@@ -1,8 +1,10 @@
-import { PropsWithChildren, useContext, useEffect } from "react"
+import { useContext } from "react"
 import LibertyLogo from "../assets/logo-with-text.png"
 import { Link } from "react-router-dom"
 import { AuthContext } from "../contexts/authContext"
 import { signOut } from "firebase/auth"
+import { auth } from "../../firebase"
+import { LOGOUT } from "../reducers/AuthReducer"
 
 
 const Navbar = () => {
@@ -23,7 +25,7 @@ const Navbar = () => {
 
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-100 px-4 py-0">
       <div className="flex-1">
         <img src={LibertyLogo} alt="roabooks-logo" style={{ height: 45 }} />
       </div>
@@ -55,8 +57,8 @@ const Navbar = () => {
 
           </>
         ) : (
-          <li>
-            <Link to="/auth" className="text-zinc-950">Connexion</Link>
+          <li className="list-none">
+            <Link to="/auth" className="text-zinc-950 btn btn-outline btn-primary rounded-full">Connexion</Link>
           </li>
         )
 

@@ -1,11 +1,68 @@
-import { MapContainer, TileLayer, } from "react-leaflet"
-import "leaflet/dist/leaflet.css";
+import Map, { Marker, NavigationControl, Source, Layer } from "react-map-gl";
+import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
+import polyline from "@mapbox/polyline";
+import { useState, useMemo, useEffect } from "react";
+import { Loader } from "google-maps";
+
+const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+const MAPTILER_API_KEY = import.meta.env.VITE_MAPTILER_API_KEY;
+
+
+const loader = new Loader(GOOGLE_API_KEY);
+const google = await loader.load();
+const directionsService = new google.maps.DirectionsService();
 
 
 const AddRoadBook = () => {
 
+    const [roadbookSteps, setRoadbookSteps] = useState([]);
+    const [route, setRoute] = useState();
+
+    const mapTilerMapStyle = useMemo(() => {
+        return `https://api.maptiler.com/maps/basic-v2/style.json?key=${MAPTILER_API_KEY}`;
+    }, []);
+
+
+    const MAPS_DEFAULT_LOCATION = {
+        latitude: 44.8638099,
+        longitude: -0.6684131,
+        zoom: 12,
+    };
+
+    const onMapClick = (event) => {
+        console.log("event", event.lngLat);
+        setRoadbookSteps([...roadbookSteps, { latitude: event.lngLat.lat, longitude: event.lngLat.lng }]);
+    };
+
+    useEffect(() => {
+        // console.log("roadbookSteps", roadbookSteps
+        if (roadbookSteps.length > 1) {
+            const origin = roadbookSteps[0];
+            const destination = roadbookSteps[roadbookSteps.length - 1];
+            const waypoints = roadbookSteps.slice(1, roadbookSteps.length - 1).map((step) => {
+                return { location: new google.maps.LatLng(step.latitude, step.longitude) };
+            });
+            const request = {
+                origin: new google.maps.LatLng(origin.latitude, origin.longitude),
+                destination: new google.maps.LatLng(destination.latitude, destination.longitude),
+                waypoints,
+                travelMode: google.maps.TravelMode.DRIVING,
+            };
+
+            console.log("request", request);
+            directionsService.route(request, (result, status) => {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    setRoute(polyline.toGeoJSON(result.routes[0].overview_polyline));
+                    console.log("result", result);
+                }
+            });
+        }
+
+    }, [roadbookSteps]);
+
     return (
-        <div className="flex h-[calc(100%-68px)]">
+        <div className="flex ">
             <div className="w-[300px] h-full">
                 <div className="flex px-1 flex-col">
                     <h1 className="text-xl font-bold">Créer un itinéraire</h1>
@@ -19,16 +76,48 @@ const AddRoadBook = () => {
                     </div>
                 </div>
             </div>
-            <div className="h-full w-full">
-                <MapContainer className="h-[calc(100vh-68px)] w-full" center={[46.5314714,2.6059299]} zoom={6} scrollWheelZoom={true}>
-                    <TileLayer
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                </MapContainer>
+            <div className="w-full">
+                <Map
+                    initialViewState={{
+                        ...MAPS_DEFAULT_LOCATION,
+                    }}
+                    hash
+                    mapLib={maplibregl}
+                    mapStyle={mapTilerMapStyle}
+                    onClick={onMapClick}
+                >
+                    <NavigationControl />
+                    {roadbookSteps.length > 0 && roadbookSteps.map((step, index) => {
+                        return (
+                            <Marker key={index} longitude={step.longitude} latitude={step.latitude}>
+                            </Marker>
+                        )
+                    }
+                    )}
+                    {route && (
+                        <>
+                            <Source id="polylineLayer" type="geojson" data={route}>
+                                <Layer
+                                    id="lineLayer"
+                                    type="line"
+                                    source="my-data"
+                                    layout={{
+                                        "line-join": "round",
+                                        "line-cap": "round",
+                                    }}
+                                    paint={{
+                                        "line-color": "rgba(3, 170, 238, 0.5)",
+                                        "line-width": 5,
+                                    }}
+                                />
+                            </Source>
+                        </>
+                    )}
+                </Map>
             </div>
         </div>
     )
+
 }
 
 export default AddRoadBook

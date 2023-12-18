@@ -6,7 +6,13 @@ export default {
   ],
   plugins:[require("daisyui")],
   daisyui: {
-    themes: ["autumn"],
+    themes: [{
+      automn: {
+        ...require("daisyui/src/theming/themes")["light"],
+        primary: "rgb(255, 97, 88)",
+        secondary: "teal",
+      },
+    },],
   },
 }
 

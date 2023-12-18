@@ -6,7 +6,7 @@ import { LOGIN } from "../../../reducers/AuthReducer";
 
 
 const LoginForm = () => {
-    const [, dispatch] = useContext(AuthContext);
+    const {dispatch} = useContext(AuthContext);
     const navigate = useNavigate()
     const { state } = useLocation()
 
