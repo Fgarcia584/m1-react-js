@@ -4,7 +4,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import polyline from "@mapbox/polyline";
 import { useState, useMemo, useEffect, useContext } from "react";
 import { Loader } from "google-maps";
-import { collection, addDoc, serverTimestamp  } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { AuthContext } from "../../contexts/authContext"
 
@@ -23,11 +23,9 @@ const AddRoadBook = () => {
 
     const currentUser = useContext(AuthContext);
 
-    console.log("AddRoadBook - currentUser", currentUser);
+    const [roadbook, setRoadbook] = useState({});
 
-    const roadBooksCollection = collection(db, "roadbooks");
-
-    console.log("AddRoadBook - roadBooksCollection", roadBooksCollection);
+    // const roadBooksCollection = collection(db, "roadbooks");
 
     const [roadbookSteps, setRoadbookSteps] = useState([]);
     const [route, setRoute] = useState();
@@ -63,6 +61,21 @@ const AddRoadBook = () => {
     };
 
     useEffect(() => {
+
+        if (roadbookSteps.length > 1) {
+            geocoder.geocode({ location: new google.maps.LatLng(roadbookSteps[0].latitude, roadbookSteps[0].longitude) }, (result, status) => {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    setLocation({
+                        city: result[0].address_components[1].long_name,
+                        country: result[0].address_components[2].long_name,
+                        region: result[0].address_components[3].long_name,
+                        state: result[0].address_components[4].long_name,
+                    });
+
+                }
+            });
+        }
+
         if (roadbookSteps.length > 1) {
             const origin = roadbookSteps[0];
             const destination = roadbookSteps[roadbookSteps.length - 1];
@@ -95,44 +108,59 @@ const AddRoadBook = () => {
     }
 
     const submitRoadbook = async () => {
-        const level = distance / 1000 < 80 ? "débutant" : distance / 1000 < 150 ? "intermédiaire" : "avancé";
-        const origin = geocoder.geocode({ location: new google.maps.LatLng(roadbookSteps[0].latitude, roadbookSteps[0].longitude) }, (result, status) => {
-            console.log("submitRoadbook - origin", result);
-            if (status == google.maps.GeocoderStatus.OK) {
-                setLocation({
-                 city: result[8].address_components[0].long_name,
-                 country: result[8].address_components[1].long_name,
-                 region: result[8].address_components[2].long_name,
-                 state: result[8].address_components[3].long_name,
-                });
-            }
-        });
 
-        const roadbook = {
+        if (roadbookName == "") {
+            alert("Veuillez donner un nom à votre itinéraire");
+            return;
+        }
+
+        const level = distance / 1000 < 80 ? "Débutant" : distance / 1000 < 150 ? "Intermédiaire" : "Avancé";
+
+        setRoadbook({
+            ...roadbook,
             title: roadbookName,
             distance: distance,
             duration: duration,
             suggested_level: level,
-            city: location.city,
-            country: location.country,
-            region: location.region,
-            state: location.state,
             steps: roadbookSteps,
             owner_uid: currentUser.state.userInfos.uid,
             owner: currentUser.state.userInfos.displayName,
             owner_photo_url: currentUser.state.userInfos.photoURL,
             description: "reh  ethvr  tyrhythrh hterhh ",
             created_at: serverTimestamp(),
-        };
+            city: location.city,
+            country: location.country,
+            region: location.region,
+            state: location.state,
+        });
 
-        await addDoc(roadBooksCollection, roadbook).then((docRef) => {
-            console.log("Document written with ID: ", docRef.id);
+        await addDoc(collection(db, 'roadbooks'), {
+            title: roadbook.title,
+            distance: roadbook.distance,
+            duration: roadbook.duration,
+            suggested_level: roadbook.suggested_level,
+            steps: roadbook.steps,
+            owner_uid: roadbook.owner_uid,
+            owner: roadbook.owner,
+            owner_photo_url: roadbook.owner_photo_url,
+            description: roadbook.description,
+            created_at: roadbook.created_at,
+            city: roadbook.city,
+            country: roadbook.country,
+            region: roadbook.region,
+            state: roadbook.state,
+        }).then((docRef) => {
+            console.log("Document written with ID: ", docRef);
         }).catch((error) => {
             console.error("Error adding document: ", error);
         }
         );
 
     }
+
+    useEffect(() => {
+        // console.log(roadbook);
+    }, [roadbook]);
 
     return (
         <div className="flex ">

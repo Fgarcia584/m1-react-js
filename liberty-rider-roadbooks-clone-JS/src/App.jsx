@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router'
 import './App.css'
 import AuthProvider from './contexts/authContext'
 import { NavbarLayout } from './pages/layouts/NavbarLayout'
-import Home from './pages/Home'
+import { Homepage }  from './pages/Home'
 import { AuthPage } from './pages/Auth/Auth'
 import AddRoadBookPage from './pages/roadbooks/addRoadBook'
 import RoadbooksLayout from './pages/layouts/RoadBooksLayout'
@@ -12,8 +12,8 @@ const App = () => {
     <AuthProvider>
       <Routes>
         <Route path='/' element={<NavbarLayout />} >
-          <Route element={<RoadbooksLayout/>}>
-            <Route index element={<Home />} />
+          <Route element={<RoadbooksLayout />}>
+            <Route index element={<Homepage />} />
           </Route>
           <Route path='/addRoute' element={<AddRoadBookPage />} />
         </Route>

@@ -1,14 +1,15 @@
 import React from "react"
 import { Fragment } from "react"
 import { useTitle } from "../hooks/useTitle"
+import { Home } from "../components/home"
 
-const Home = () => {
+export const Homepage = () => {
     useTitle("Balades moto : trouver, lancer ou créer le meilleur road book")
+
+
     return (
         <Fragment>
-            <h1 className="h-screen">Bienvenue sur mon site</h1>
+            <Home />
         </Fragment>
     )
 }
-
-export default Home
