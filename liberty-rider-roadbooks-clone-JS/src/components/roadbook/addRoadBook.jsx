@@ -156,9 +156,6 @@ const AddRoadBook = () => {
 
     }
 
-    useEffect(() => {
-        // console.log(roadbook);
-    }, [roadbook]);
 
     return (
         <div className="flex ">

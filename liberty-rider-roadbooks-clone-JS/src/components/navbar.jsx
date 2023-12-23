@@ -15,38 +15,36 @@ const Navbar = () => {
 
   const onLogout = async () => {
     await signOut(auth)
-        .then(() => {
-            localStorage.removeItem('@user')
-            dispatch({ type: LOGOUT })
-        })
-        .catch(error => console.log('SignOut error ->', error))
+      .then(() => {
+        localStorage.removeItem('@user')
+        dispatch({ type: LOGOUT })
+      })
+      .catch(error => console.log('SignOut error ->', error))
   }
-
-
 
   return (
     <div className="navbar bg-base-100 px-4 py-0">
       <div className="flex-1">
-        <img src={LibertyLogo} alt="roabooks-logo" style={{ height: 45 }} />
+        <Link to="/" ><img src={LibertyLogo} alt="roabooks-logo" style={{ height: 45 }} /></Link>
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1 text-zinc-950">
           <li>
-            <Link to="/" className="text-zinc-950">GPS Moto</Link>
+            <div className="text-zinc-950">GPS Moto</div>
           </li>
           <li>
-            <Link to="/" className="text-zinc-950">Roadbooks</Link>
+            <Link to={"/"} className="text-zinc-950" >Roadbooks</Link>
           </li>
           <li>
-            <Link to="/" className="text-zinc-950">SOS Accident</Link>
+            <div className="text-zinc-950">SOS Accident</div>
           </li>
           <li>
-            <Link to="/" className="text-zinc-950">Premium offert</Link>
+            <div className="text-zinc-950">Premium offert</div>
           </li>
         </ul>
         {state.isLoggedIn ? (
           <>
-            <img className="w-8 rounded-full" src={ photoUrl } />
+            <img className="w-8 rounded-full" src={photoUrl} />
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="btn btn-ghost rounded-btn">{userName}</div>
               <ul tabIndex={0} className="menu dropdown-content z-[1] shadow bg-base-100 rounded-box w-44 mt-4">

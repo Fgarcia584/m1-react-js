@@ -7,6 +7,7 @@ import { AuthPage } from './pages/Auth/Auth'
 import AddRoadBookPage from './pages/roadbooks/addRoadBook'
 import RoadbooksLayout from './pages/layouts/RoadBooksLayout'
 import { RoadbookSearchListPage } from './pages/roadbooks/roadBookSearchList'
+import { RoadBookDetailledPage } from './pages/roadbooks/roadBookDetailled'
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
             <Route index element={<Homepage />} />
             <Route path="/search/:destination" element={<RoadbookSearchListPage />} />
           </Route>
+            <Route path="/roadbooks/:roadbookId" element={<RoadBookDetailledPage />} />
           <Route path='/addRoute' element={<AddRoadBookPage />} />
         </Route>
         <Route path='/auth' element={<AuthPage />} />

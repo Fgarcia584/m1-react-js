@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, getDocs, query, where, limit } from "firebase/firestore"
 import { db } from "../../../firebase"
 import { RoadbookCard } from '../roadbook/roadbookCard';
+import { Link } from 'react-router-dom';
 
 
 export const HomeCarousel = ({ city }) => {
@@ -26,8 +27,8 @@ export const HomeCarousel = ({ city }) => {
     return (
         <div className="max-w-[1290px] mx-auto">
             <div className="flex flex-row justify-between p-4 items-center">
-                <div className="text-[35px] font-extrabold">Balades moto { city }</div>
-                <div>Toutes les balades moto { city }</div>
+                <div className="text-[35px] font-extrabold text-black">Balades moto { city }</div>
+                <Link to={`/search/${city}`} className="text-sky-800 font-semibold">Toutes les balades moto { city }</Link>
             </div>
             <div className="flex flex-row justify-between p-4 items-center overflow-x-auto">
                 {roadbooks.length > 0 && roadbooks.map(roadbook => {
