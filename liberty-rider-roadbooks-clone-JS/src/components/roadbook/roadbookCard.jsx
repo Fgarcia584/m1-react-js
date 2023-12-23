@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export const RoadbookCard = ({ roadbook, tmp_url }) => {
-    // console.log(roadbook)
     return (
         <div className="card w-[294px] bg-base-100 shadow-md my-3">
             <Link to={`/roadbooks/${roadbook.id}`} state={roadbook}>

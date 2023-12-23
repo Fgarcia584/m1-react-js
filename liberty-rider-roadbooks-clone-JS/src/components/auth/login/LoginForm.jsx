@@ -16,7 +16,6 @@ const LoginForm = () => {
             const response = await signInWithGooglePopup();
             
                 if (response.user) {
-                    // console.log(response.user)
                     dispatch({ type: LOGIN, payload: response.user })
                     localStorage.setItem('@user', JSON.stringify(response.user))
                     navigate(state?.from ? state.from : '/')

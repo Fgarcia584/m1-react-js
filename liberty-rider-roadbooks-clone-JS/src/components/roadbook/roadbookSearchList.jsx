@@ -27,7 +27,6 @@ export const RoadbookSearchList = () => {
     }, [destination])
 
     useEffect(() => {
-        console.log(roadbooks)
     }, [roadbooks])
 
     return (

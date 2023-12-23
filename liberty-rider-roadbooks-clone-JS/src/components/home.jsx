@@ -18,7 +18,6 @@ export const Home = () => {
     }, [])
 
     useEffect(() => {
-        console.log(roadbooks)
     }, [roadbooks])
 
     return (

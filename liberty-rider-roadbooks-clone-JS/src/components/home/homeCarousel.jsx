@@ -21,7 +21,6 @@ export const HomeCarousel = ({ city }) => {
     }, [])
 
     useEffect(() => {
-        console.log(roadbooks)
     }, [roadbooks])
 
     return (
