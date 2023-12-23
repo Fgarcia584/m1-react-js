@@ -1,7 +1,7 @@
 export const RoadbookCard = ({ roadbook, tmp_url }) => {
     console.log(roadbook)
     return (
-        <div className="card w-[294px] bg-base-100 shadow-md">
+        <div className="card w-[294px] bg-base-100 shadow-md my-3">
             <div className="card-body m-3 p-2">
                 <div className="flex items-center">
                     <img className="w-6 rounded-full" src={roadbook.owner_photo_url} />

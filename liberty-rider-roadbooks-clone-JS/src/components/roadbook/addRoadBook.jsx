@@ -25,8 +25,6 @@ const AddRoadBook = () => {
 
     const [roadbook, setRoadbook] = useState({});
 
-    // const roadBooksCollection = collection(db, "roadbooks");
-
     const [roadbookSteps, setRoadbookSteps] = useState([]);
     const [route, setRoute] = useState();
 
@@ -177,7 +175,7 @@ const AddRoadBook = () => {
                                     <div className="btn btn-primary text-white btn-sm">Importe un GPX</div>
                                 </div>
                             </div>
-                            <div className="p-5 bg-zinc-700 rounded-lg w-[292px]">
+                            <div className="p-5 bg-zinc-700 rounded-lg w-[292px] max-h-[370px] overflow-y-auto">
                                 <h2 className="text-white text-left my-4 font-bold text-lg">Prépare</h2>
                                 <p className="text-white text-left">Prépare ton voyage moto en plaçant les points sur la carte ou en important une trace GPX. Ta route est tracée en quelques clics.</p>
                                 <h2 className="text-white text-left my-4 font-bold text-lg">Enregistre</h2>
