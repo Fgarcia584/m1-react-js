@@ -7,6 +7,8 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { AuthContext } from "../../contexts/authContext"
 import { directionsService } from '../../App'
+import { geocoder } from '../../App'
+import { navigate } from "react-router-dom";
 
 const MAPTILER_API_KEY = import.meta.env.VITE_MAPTILER_API_KEY;
 
@@ -141,6 +143,8 @@ const AddRoadBook = () => {
             state: roadbook.state,
         }).then((docRef) => {
             console.log("Document written with ID: ", docRef);
+            navigate('/')
+
         }).catch((error) => {
             console.error("Error adding document: ", error);
         }
