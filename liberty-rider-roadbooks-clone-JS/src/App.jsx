@@ -8,6 +8,15 @@ import AddRoadBookPage from './pages/roadbooks/addRoadBook'
 import RoadbooksLayout from './pages/layouts/RoadBooksLayout'
 import { RoadbookSearchListPage } from './pages/roadbooks/roadBookSearchList'
 import { RoadBookDetailledPage } from './pages/roadbooks/roadBookDetailled'
+import { Loader } from 'google-maps'
+
+
+const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+const loader = new Loader(GOOGLE_API_KEY);
+const google = await loader.load();
+export const directionsService = new google.maps.DirectionsService();
+export const geocoder = new google.maps.Geocoder();
+
 
 const App = () => {
   return (

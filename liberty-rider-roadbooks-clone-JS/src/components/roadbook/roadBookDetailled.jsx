@@ -1,47 +1,39 @@
-import React from 'react'
-import { useParams, useLocation } from 'react-router'
+import React, { useState, useEffect, useMemo } from 'react'
+import { useLocation } from 'react-router'
 import { Map, Marker, NavigationControl, Source, Layer } from 'react-map-gl'
+import maplibregl from 'maplibre-gl'
+import "maplibre-gl/dist/maplibre-gl.css";
+import polyline from "@mapbox/polyline";
+import { directionsService } from '../../App'
+import { useTitle } from '../../hooks/useTitle';
+import { Link } from 'react-router-dom';
 
-const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 const MAPTILER_API_KEY = import.meta.env.VITE_MAPTILER_API_KEY;
+
 
 export const RoadBookDetailled = () => {
 
     const { state } = useLocation()
+    useTitle(state.title)
 
     const mapTilerMapStyle = useMemo(() => {
         return `https://api.maptiler.com/maps/basic-v2/style.json?key=${MAPTILER_API_KEY}`;
     }, []);
 
-    const [location, setLocation] = useState(null);
     const [route, setRoute] = useState(null);
 
     const MAPS_DEFAULT_LOCATION = {
-        latitude: state.roadbookSteps[0].latitude,
-        longitude: state.roadbookSteps[0].longitude,
+        latitude: state.steps[0].latitude,
+        longitude: state.steps[0].longitude,
         zoom: 12,
     };
 
-    useEffect(() => {
 
-        if (roadbookSteps.length > 1) {
-            geocoder.geocode({ location: new google.maps.LatLng(roadbookSteps[0].latitude, roadbookSteps[0].longitude) }, (result, status) => {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    setLocation({
-                        city: result[0].address_components[1].long_name,
-                        country: result[0].address_components[2].long_name,
-                        region: result[0].address_components[3].long_name,
-                        state: result[0].address_components[4].long_name,
-                    });
-
-                }
-            });
-        }
-
-        if (roadbookSteps.length > 1) {
-            const origin = roadbookSteps[0];
-            const destination = roadbookSteps[roadbookSteps.length - 1];
-            const waypoints = roadbookSteps.slice(1, roadbookSteps.length - 1).map((step) => {
+    const buildPolyline = () => {
+        if (state.steps && state.steps.length > 1) {
+            const origin = state.steps[0];
+            const destination = state.steps[state.steps.length - 1];
+            const waypoints = state.steps.slice(1, state.steps.length - 1).map((step) => {
                 return { location: new google.maps.LatLng(step.latitude, step.longitude) };
             });
             const request = {
@@ -56,12 +48,13 @@ export const RoadBookDetailled = () => {
                 }
             });
         }
-
-    }, [roadbookSteps]);
-
+    }
 
 
-    console.log(state)
+    useEffect(() => {
+        buildPolyline();
+    }, []);
+
     return (
         <>
             <div className="w-full h-[400px]">
@@ -72,10 +65,10 @@ export const RoadBookDetailled = () => {
                     hash
                     mapLib={maplibregl}
                     mapStyle={mapTilerMapStyle}
-                    onClick={onMapClick}
                 >
                     <NavigationControl />
-                    {roadbookSteps.length > 0 && roadbookSteps.map((step, index) => {
+
+                    {state.steps.length > 0 && state.steps.map((step, index) => {
                         return (
                             <Marker key={index} longitude={step.longitude} latitude={step.latitude}>
                             </Marker>
@@ -103,6 +96,64 @@ export const RoadBookDetailled = () => {
                     )}
                 </Map>
             </div>
+            <div className="flex justify-center bg-base-100">
+                <div className='w-[55%]'>
+                    <div className="my-5">
+                        <Link to={`/search/${state.country}`} className='text-sky-600 '> &lt; Toutes les balades moto {state.country}</Link>
+                    </div>
+                    <div className="my-5">
+                        <h1 className='text-4xl font-extrabold my-5'>{state.title}</h1>
+                        <div className="flex place-content-between">
+                            <div className='flex items-center'>
+                                <img className="w-8 rounded-full border-2 border-white" src={state.owner_photo_url} />
+                                <div className="pl-3 text-xs font-semibold">{state.owner.split(' ')[0]}</div>
+                            </div>
+                            <div className='text-gray-400 text-xs'>Ajouté le {new Date(state.created_at.seconds * 1000).toLocaleDateString("fr")}</div>
+                        </div>
+                    </div>
+                    <div className="my-5">
+                        <div className='flex items-center place-content-between flex-wrap text-[15px]'>
+                            <div className='my-2'>
+                                <div className="mb-1">Distance</div>
+                                <div className="text-xl font-semibold">{Math.round((state.distance / 1000))} Km</div>
+                            </div>
+                            <div className='border-l border-gray-300 w-[1px] self-stretch'></div>
+                            <div className='my-2'>
+                                <div className="mb-1">Durée</div>
+                                <div className="text-xl font-semibold">{Math.floor(state.duration / 3600)}h{Math.round(state.duration % 60)}</div>
+                            </div>
+                            <div className='border-l border-gray-300 w-[1px] self-stretch'></div>
+                            <div className='my-2'>
+                                <div className="mb-1">Niveau</div>
+                                <div className="text-xl font-semibold">{state.suggested_level}</div>
+                            </div>
+                            <div>
+                                <div className="rating rating-sm text-gray-300 ">
+                                    <input type="radio" name="rating-6" className="mask mask-star-2 bg-orange-400" />
+                                    <input type="radio" name="rating-6" className="mask mask-star-2 bg-orange-400" />
+                                    <input type="radio" name="rating-6" className="mask mask-star-2 bg-orange-400" />
+                                    <input type="radio" name="rating-6" className="mask mask-star-2 bg-orange-400" checked readOnly/>
+                                    <input type="radio" name="rating-6" className="mask mask-star-2 bg-orange-400" />
+                                </div>
+                                <span className='text-gray-300 mx-2'>•</span>
+                                14 avis
+                            </div>
+                        </div>
+                        <div className='py-4 my-3 border-y border-gray-300'>
+                            <div className='flex place-content-between flex-wrap text-[13px]'>
+                                <div className="btn btn-primary text-white font-semibold rounded-lg"> Lancer le guidage</div>
+                            </div>
+                        </div>
+                        <div className='my-4 break-words'>
+                            <div>
+                                {state.descrpition}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className='w-[38%] '></div>
+            </div>
+
         </>
     )
 }

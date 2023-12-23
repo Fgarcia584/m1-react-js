@@ -14,7 +14,7 @@ export const RoadbookCard = ({ roadbook, tmp_url }) => {
                     <h3 className="card-title text-[15px]">{roadbook.title}</h3>
                     <div className="rating rating-xs">
                         <input type="radio" name="rating-4" className="mask mask-star-2 bg-yellow-500" />
-                        <input type="radio" name="rating-4" className="mask mask-star-2 bg-yellow-500" checked />
+                        <input type="radio" name="rating-4" className="mask mask-star-2 bg-yellow-500" checked readOnly/>
                         <input type="radio" name="rating-4" className="mask mask-star-2 bg-yellow-500" />
                         <input type="radio" name="rating-4" className="mask mask-star-2 bg-yellow-500" />
                         <input type="radio" name="rating-4" className="mask mask-star-2 bg-yellow-500" />

@@ -3,20 +3,12 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import polyline from "@mapbox/polyline";
 import { useState, useMemo, useEffect, useContext } from "react";
-import { Loader } from "google-maps";
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { AuthContext } from "../../contexts/authContext"
+import { directionsService } from '../../App'
 
-
-const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 const MAPTILER_API_KEY = import.meta.env.VITE_MAPTILER_API_KEY;
-
-
-const loader = new Loader(GOOGLE_API_KEY);
-const google = await loader.load();
-const directionsService = new google.maps.DirectionsService();
-const geocoder = new google.maps.Geocoder();
 
 
 const AddRoadBook = () => {
@@ -51,7 +43,7 @@ const AddRoadBook = () => {
     const MAPS_DEFAULT_LOCATION = {
         latitude: 44.8638099,
         longitude: -0.6684131,
-        zoom: 12,
+        zoom: 19,
     };
 
     const onMapClick = (event) => {
