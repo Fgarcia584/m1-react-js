@@ -7,6 +7,9 @@ import polyline from "@mapbox/polyline";
 import { directionsService } from '../../App'
 import { useTitle } from '../../hooks/useTitle';
 import { Link } from 'react-router-dom';
+import { HomeCarousel } from '../home/homeCarousel';
+import  Footer  from '../footer/footer';
+import lorem from '../../assets/lorem'
 
 const MAPTILER_API_KEY = import.meta.env.VITE_MAPTILER_API_KEY;
 
@@ -96,64 +99,80 @@ export const RoadBookDetailled = () => {
                     )}
                 </Map>
             </div>
-            <div className="flex justify-center bg-base-100">
-                <div className='w-[55%]'>
-                    <div className="my-5">
-                        <Link to={`/search/${state.country}`} className='text-sky-600 '> &lt; Toutes les balades moto {state.country}</Link>
-                    </div>
-                    <div className="my-5">
-                        <h1 className='text-4xl font-extrabold my-5'>{state.title}</h1>
-                        <div className="flex place-content-between">
-                            <div className='flex items-center'>
-                                <img className="w-8 rounded-full border-2 border-white" src={state.owner_photo_url} />
-                                <div className="pl-3 text-xs font-semibold">{state.owner.split(' ')[0]}</div>
-                            </div>
-                            <div className='text-gray-400 text-xs'>Ajouté le {new Date(state.created_at.seconds * 1000).toLocaleDateString("fr")}</div>
+            <div className='flex justify-center bg-slate-50'>
+                <div className="flex justify-between w-[1170px]">
+                    <div className='w-[55%]'>
+                        <div className="my-5">
+                            <Link to={`/search/${state.country}`} className='text-sky-600 '> &lt; Toutes les balades moto {state.country}</Link>
                         </div>
-                    </div>
-                    <div className="my-5">
-                        <div className='flex items-center place-content-between flex-wrap text-[15px]'>
-                            <div className='my-2'>
-                                <div className="mb-1">Distance</div>
-                                <div className="text-xl font-semibold">{Math.round((state.distance / 1000))} Km</div>
-                            </div>
-                            <div className='border-l border-gray-300 w-[1px] self-stretch'></div>
-                            <div className='my-2'>
-                                <div className="mb-1">Durée</div>
-                                <div className="text-xl font-semibold">{Math.floor(state.duration / 3600)}h{Math.round(state.duration % 60)}</div>
-                            </div>
-                            <div className='border-l border-gray-300 w-[1px] self-stretch'></div>
-                            <div className='my-2'>
-                                <div className="mb-1">Niveau</div>
-                                <div className="text-xl font-semibold">{state.suggested_level}</div>
-                            </div>
-                            <div>
-                                <div className="rating rating-sm text-gray-300 ">
-                                    <input type="radio" name="rating-6" className="mask mask-star-2 bg-orange-400" />
-                                    <input type="radio" name="rating-6" className="mask mask-star-2 bg-orange-400" />
-                                    <input type="radio" name="rating-6" className="mask mask-star-2 bg-orange-400" />
-                                    <input type="radio" name="rating-6" className="mask mask-star-2 bg-orange-400" checked readOnly/>
-                                    <input type="radio" name="rating-6" className="mask mask-star-2 bg-orange-400" />
+                        <div className="my-5">
+                            <h1 className='text-4xl font-extrabold my-5'>{state.title}</h1>
+                            <div className="flex place-content-between">
+                                <div className='flex items-center'>
+                                    <img className="w-8 rounded-full border-2 border-white" src={state.owner_photo_url} />
+                                    <div className="pl-3 text-xs font-semibold">{state.owner.split(' ')[0]}</div>
                                 </div>
-                                <span className='text-gray-300 mx-2'>•</span>
-                                14 avis
+                                <div className='text-gray-400 text-xs'>Ajouté le {new Date(state.created_at.seconds * 1000).toLocaleDateString("fr")}</div>
                             </div>
                         </div>
-                        <div className='py-4 my-3 border-y border-gray-300'>
-                            <div className='flex place-content-between flex-wrap text-[13px]'>
-                                <div className="btn btn-primary text-white font-semibold rounded-lg"> Lancer le guidage</div>
+                        <div className="my-5">
+                            <div className='flex items-center place-content-between flex-wrap text-[15px]'>
+                                <div className='my-2'>
+                                    <div className="mb-1">Distance</div>
+                                    <div className="text-xl font-semibold">{Math.round((state.distance / 1000))} Km</div>
+                                </div>
+                                <div className='border-l border-gray-300 w-[1px] self-stretch'></div>
+                                <div className='my-2'>
+                                    <div className="mb-1">Durée</div>
+                                    <div className="text-xl font-semibold">{Math.floor(state.duration / 3600)}h{Math.round(state.duration % 60)}</div>
+                                </div>
+                                <div className='border-l border-gray-300 w-[1px] self-stretch'></div>
+                                <div className='my-2'>
+                                    <div className="mb-1">Niveau</div>
+                                    <div className="text-xl font-semibold">{state.suggested_level}</div>
+                                </div>
+                                <div>
+                                    <div className="rating rating-sm text-gray-300 ">
+                                        <input type="radio" name="rating-6" className="mask mask-star-2 bg-orange-400" />
+                                        <input type="radio" name="rating-6" className="mask mask-star-2 bg-orange-400" />
+                                        <input type="radio" name="rating-6" className="mask mask-star-2 bg-orange-400" />
+                                        <input type="radio" name="rating-6" className="mask mask-star-2 bg-orange-400" checked readOnly />
+                                        <input type="radio" name="rating-6" className="mask mask-star-2 bg-orange-400" />
+                                    </div>
+                                    <span className='text-gray-300 mx-2'>•</span>
+                                    14 avis
+                                </div>
+                            </div>
+                            <div className='py-4 my-3 border-y border-gray-300'>
+                                <div className='flex place-content-between flex-wrap text-[13px]'>
+                                    <div className="btn btn-primary text-white font-semibold rounded-lg">Lancer le guidage</div>
+                                </div>
+                            </div>
+                            <div className='my-4 break-words'>
+                                <div className='text-[15px]'>
+                                    <p>{lorem}</p>
+                                </div>
                             </div>
                         </div>
-                        <div className='my-4 break-words'>
-                            <div>
-                                {state.descrpition}
+                    </div>
+                    <div className='w-[38%]'>
+                        <div className="w-[456px] mt-[-30px] absolute z-10">
+                            <div className="py-4 px-7 bg-white ">
+                                <div className='my-9 font-semibold text-2xl'>Comment ça marche ?</div>
+                                <ol className='my-8 text-lg text-gray-600 pl-6 list-decimal'>
+                                    <li className='my-5 pl-4 font-bold'><span className='font-normal'>Enregistre ce Roadbook pour le guidage</span></li>
+                                    <li className='my-5 pl-4 font-bold'><span className='font-normal'>Retrouve-le dans le GPS de l’app</span></li>
+                                    <li className='my-5 pl-4 font-bold'><span className='font-normal'>Laisse-toi guider, <span className='font-bold'>c’est gratuit.</span></span></li>
+                                </ol>
+                                <div></div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className='w-[38%] '></div>
             </div>
 
+            <HomeCarousel city={state.country}/>
+            <Footer/>
         </>
     )
 }

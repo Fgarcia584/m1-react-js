@@ -33,7 +33,7 @@ export const HomeCarousel = ({ city }) => {
             <div className="flex flex-row justify-between p-4 items-center overflow-x-auto">
                 {roadbooks.length > 0 && roadbooks.map(roadbook => {
                     return (
-                        <RoadbookCard roadbook={roadbook} tmp_url={"https://loremflickr.com/g/320/240/motorbike?random=" + Math.random(1000)} />
+                        <RoadbookCard key={roadbook.id} roadbook={roadbook} tmp_url={"https://loremflickr.com/g/320/240/motorbike?random=" + Math.random(1000)} />
                     )
                 })}
             </div>
